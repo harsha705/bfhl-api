@@ -6,13 +6,17 @@ import com.harsha.bfhl.exception.InvalidRequestException;
 import com.harsha.bfhl.service.BfhlService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("/bfhl")
+@RequestMapping
 public class BfhlController {
 
     private final BfhlService bfhlService;
@@ -21,7 +25,16 @@ public class BfhlController {
         this.bfhlService = bfhlService;
     }
 
-    @PostMapping
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, Object>> health() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("service", "BFHL API");
+        response.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/bfhl")
     public ResponseEntity<BfhlResponse> processData(@Valid @RequestBody(required = false) BfhlRequest request) {
         if (request == null) {
             throw new InvalidRequestException("Request body must not be null");

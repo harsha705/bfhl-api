@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -17,6 +18,16 @@ class BfhlControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    @DisplayName("GET /health returns UP status")
+    void testHealthEndpoint() throws Exception {
+        mockMvc.perform(get("/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("UP"))
+                .andExpect(jsonPath("$.service").value("BFHL API"))
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
 
     @Test
     @DisplayName("POST /bfhl - Example A returns 200 with correct fields")
