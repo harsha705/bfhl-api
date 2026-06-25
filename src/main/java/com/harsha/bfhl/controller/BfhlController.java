@@ -25,6 +25,19 @@ public class BfhlController {
         this.bfhlService = bfhlService;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Map<String, Object>> root() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("service", "BFHL API");
+        response.put("status", "UP");
+        response.put("endpoints", Map.of(
+            "health", "GET /health",
+            "bfhl", "POST /bfhl"
+        ));
+        response.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> health() {
         Map<String, Object> response = new HashMap<>();

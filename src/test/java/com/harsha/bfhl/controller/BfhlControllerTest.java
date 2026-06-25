@@ -20,6 +20,17 @@ class BfhlControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    @DisplayName("GET / returns API info")
+    void testRootEndpoint() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.service").value("BFHL API"))
+                .andExpect(jsonPath("$.status").value("UP"))
+                .andExpect(jsonPath("$.endpoints").exists())
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
     @DisplayName("GET /health returns UP status")
     void testHealthEndpoint() throws Exception {
         mockMvc.perform(get("/health"))
